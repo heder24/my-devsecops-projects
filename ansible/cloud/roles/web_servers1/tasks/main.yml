@@ -1,0 +1,15 @@
+---
+# tasks file for web_servers1
+- name: Install latest version of nginx on Ubuntu Servers
+  ansible.builtin.apt:
+    name: "{{ service }}"
+    state: "{{ state }}"
+  when: ansible_distribution == "Ubuntu"
+
+- name: Copy web contents to Ubuntu web servers
+  ansible.builtin.copy:
+    src: index.html
+    dest: /var/www/html/
+    owner: "{{ user }}"
+    group: "{{ user }}"
+    mode: '0644'

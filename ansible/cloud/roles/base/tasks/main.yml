@@ -1,0 +1,4 @@
+- name: Install updates on all Ubuntu Servers
+  ansible.builtin.apt:
+    update_cache: yes
+  when: ansible_distribution == "Ubuntu"

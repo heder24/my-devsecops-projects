@@ -1,0 +1,24 @@
+---
+
+############ Install Updates. nginx , Copy fies and Restart Services ##############
+- hosts: all
+  become: true 
+  tasks:
+  - name: Install Updates
+    ansible.builtin.apt:
+      update_cache: yes
+  - name: Install latest version of nginx
+    ansible.builtin.apt:
+      name: nginx
+      state: latest
+  - name: Copy web contents to web servers
+    ansible.builtin.copy:
+      src: ../files/index.html
+      dest: /var/www/html/
+      owner: cyber
+      group: cyber
+      mode: '0644'
+  - name: Start service httpd, if not started
+    ansible.builtin.service:
+      name: nginx
+      state: restarted

@@ -1,0 +1,6 @@
+---
+- name: Install and Configure Nginx on qa Servers
+  hosts: all #tag_Env_qa
+  roles:
+    - nginx 
+    

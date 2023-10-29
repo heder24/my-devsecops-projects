@@ -1,0 +1,22 @@
+---
+##################### Check if a file exists and Restart the HTTPd service ###############################
+- hosts: web_servers
+  become: true
+  vars:
+    file_path: /var/www/html/index.html
+
+  tasks: 
+
+  - name: check if file exists
+    ansible.builtin.stat:
+      path: "{{file_path}}"
+    register: file_found
+  
+  - name: Restart httpd service 
+    ansible.builtin.service:
+      name: nginx
+      state: restarted
+    when: file_found.stat.exists
+      
+
+  

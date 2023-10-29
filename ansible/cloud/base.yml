@@ -1,0 +1,14 @@
+---
+
+####### To target a specific server or servers, please use EC2 Tags e.g tag_Name_staging_web
+- name: Install and Configure Nginx on QA Server
+  hosts: all 
+  pre_tasks:
+    - name: Install updates on all servers
+        ansible.builtin.apt:
+          update_cache: yes
+  roles:
+      - hifis.unattended_upgrades
+      - diodonfrost.amazon_codedeploy
+      # - role: mindpointgroup.ubuntu20_cis
+      #   when: ansible_distribution_version is version("20.04", "==")

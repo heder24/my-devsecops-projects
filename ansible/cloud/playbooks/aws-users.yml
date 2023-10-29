@@ -1,0 +1,37 @@
+---
+############# Create three users on AWS servers #####################################
+- hosts: [cloud_servers]
+  vars:
+    users:
+      - cyber1
+      - cyber2
+      - cyber3
+    tasks:
+    - name: Create a user on Amazon Servers
+      ansible.builtin.user:
+        user: "{{item}}"
+        shell: /bin/bash
+        groups: adm,wheel
+        append: yes
+      when: ansible_distribution == "Amazon"
+      loop: "{{users}}"
+
+    - name: Create a user on Ubuntu Servers
+      ansible.builtin.user:
+        user: "{{item}}"
+        shell: /bin/bash
+        groups: adm,sudo
+        append: yes
+      when: ansible_distribution == "Ubuntu"
+      loop: "{{users}}"
+      
+######################### Copy users'keys to AWS servers #################################
+
+    - name: Copy users' key to servers
+      ansible.posix.authorized_key:
+        user: "{{item}}"
+        state: present
+        key: "{{ lookup('file', '~/.ssh/{{item}}_rsa.pub') }}"
+      loop: "{{users}}"
+      
+    

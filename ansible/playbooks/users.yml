@@ -1,0 +1,32 @@
+---
+############# Create user cyber on AWS servers #####################################
+- hosts: cloud_servers
+  tasks:
+    - name: Create cyber user on Amazon Servers
+      ansible.builtin.user:
+        name: cyber
+        shell: /bin/bash
+        groups: adm,wheel
+        append: yes
+        comment: cyber user
+      when: ansible_distribution == "Amazon"
+
+    - name: Create cyber user on Ubuntu Servers
+      ansible.builtin.user:
+        name: cyber
+        shell: /bin/bash
+        groups: adm,sudo
+        append: yes
+        comment: cyber user
+      when: ansible_distribution == "Ubuntu"
+
+######################### Copy key to AWS servers #################################
+
+    - name: Set authorized key taken from file
+      ansible.posix.authorized_key:
+        user: cyber
+        state: present
+        key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+
+        

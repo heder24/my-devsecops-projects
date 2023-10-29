@@ -1,0 +1,13 @@
+---
+
+####### To target a specific server or servers, please use EC2 Tags e.g tag_Name_staging_web
+- name: Run ansible base roles on all servers
+  hosts: all #tag_Env_qa  
+  pre_tasks:
+    - name: Install updates on all servers
+      ansible.builtin.apt:
+        update_cache: yes
+  roles:
+      - hifis.unattended_upgrades
+      - diodonfrost.amazon_codedeploy
+  

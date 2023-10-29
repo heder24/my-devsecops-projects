@@ -1,0 +1,69 @@
+---
+############################### Run updates and install ngninx on AWS servers #####################################
+- hosts: cloud_servers
+  vars:
+    amazon_web_src: ~/repos/heder-class-devops/ansible/files/amazon/index.html
+    amazon_web_dest: /usr/share/nginx/html/
+    ubuntu_web_src: ~/repos/heder-class-devops/ansible/files/ubuntu/index.html
+    ubuntu_web_dest: /var/www/html/
+    amazon_user: ec2-user
+    ubuntu_user: ubuntu
+    file_permission: "0664"
+    
+  pre_tasks:
+    - name: Install updates on all Amazon Servers
+      tags: always
+      ansible.builtin.yum:
+        update_cache: yes
+      when: ansible_distribution == "Amazon"
+
+    - name: Install updates on all Ubuntu Servers
+      tags: always
+      ansible.builtin.apt:
+        update_cache: yes
+      when: ansible_distribution == "Ubuntu"
+
+  tasks:
+    - name: Install latest version of nginx Amazon Servers
+      tags: amazon_servers
+      ansible.builtin.yum:
+        name: nginx
+        state: latest
+      when: ansible_distribution == "Amazon"
+
+    - name: Install latest version of nginx Ubuntu Servers
+      tags: ubuntu_servers
+      ansible.builtin.apt:
+        name: nginx
+        state: latest
+      when: ansible_distribution == "Ubuntu"
+
+    - name: Copy web contents to web Amazon servers
+      ansible.builtin.copy:
+        src: "{{amazon_web_src}}"
+        dest: "{{amazon_web_dest}}"
+        owner: "{{amazon_user}}"
+        group: "{{amazon_user}}"
+        mode: "{{file_permission}}"
+      when: ansible_distribution == "Amazon"
+      notify: 
+      - restart nginx 
+
+    - name: Copy web contents to web Ubuntu servers
+      ansible.builtin.copy:
+        src: "{{ubuntu_web_src}}"
+        dest: "{{ubuntu_web_dest}}"
+        owner: "{{ubuntu_user}}"
+        group: "{{ubuntu_user}}"
+        mode: "{{file_permission}}"
+      when: ansible_distribution == "Ubuntu"
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted
+        
+        
+ 
+        

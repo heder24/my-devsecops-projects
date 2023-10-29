@@ -1,0 +1,5 @@
+---
+# vars file for web_servers1
+service: nginx
+state: latest
+user: cyber

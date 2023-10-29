@@ -1,0 +1,5 @@
+---
+- name: Install and Configure Nginx on staging Servers
+  hosts: all #tag_Env_staging_web
+  roles:
+    - nginx 

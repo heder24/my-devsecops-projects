@@ -1,0 +1,17 @@
+10.10.10.25
+10.10.10.30
+
+[web_servers]
+10.10.10.25
+
+[db-servers]
+10.10.10.30
+[onprem_servers]
+10.10.10.55
+10.10.10.60
+
+[cloud_servers]
+3.142.68.252 ansible_ssh_private_key_file=~/.ssh/main-us-east-2.pem ansible_user=ubuntu
+18.188.150.5 ansible_ssh_private_key_file=~/.ssh/main-us-east-2.pem ansible_user=ubuntu
+3.18.220.114 ansible_ssh_private_key_file=~/.ssh/main-us-east-2.pem ansible_user=ec2-user
+3.19.240.99 ansible_ssh_private_key_file=~/.ssh/main-us-east-2.pem ansible_user=ec2-user

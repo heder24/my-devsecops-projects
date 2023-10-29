@@ -1,0 +1,14 @@
+- name: Install latest version of nginx Amazon Servers
+  tags: amazon_servers
+  ansible.builtin.apt:
+    name: nginx
+    state: latest
+  when: ansible_distribution == "Amazon"
+
+- name: Copy web contents to web servers
+  ansible.builtin.copy:
+    src: index.html
+    dest: /var/www/html/
+    owner: cyber
+    group: cyber
+    mode: '0644'

@@ -1,0 +1,9 @@
+---
+- name: Include Base Play
+  import_playbook: base.yml
+
+- name: Install and Configure Nginx on stage Servers
+  hosts: all #tag_Env_stage
+  roles:
+    - nginx 
+  

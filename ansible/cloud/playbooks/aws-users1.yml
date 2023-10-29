@@ -1,0 +1,33 @@
+---
+############# Create three users on AWS servers using file that contains a variable list cd play#####################################
+- hosts: [cloud_servers]
+  vars_files: users-list.yml
+  tasks:
+  - name: Create a user on Amazon Servers
+    ansible.builtin.user:
+      user: "{{item}}"
+      shell: /bin/bash
+      groups: adm,wheel
+      append: yes
+    when: ansible_distribution == "Amazon"
+    loop: "{{users}}"
+
+  - name: Create a user on Ubuntu Servers
+    ansible.builtin.user:
+      user: "{{item}}"
+      shell: /bin/bash
+      groups: adm,sudo
+      append: yes
+    when: ansible_distribution == "Ubuntu"
+    loop: "{{users}}"
+    
+######################### Copy users'keys to AWS servers #################################
+
+  - name: Copy users' key to servers
+    ansible.posix.authorized_key:
+      user: "{{item}}"
+      state: present
+      key: "{{lookup('file', '../files/keys/{{item}}.pub') }}"
+    loop: "{{users}}"
+    
+  
